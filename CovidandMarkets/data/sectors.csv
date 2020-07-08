@@ -1,0 +1,109 @@
+"rank_group","sector","change"
+"Rank A: Real-Time Performance","Information Technology",0.0142
+"Rank A: Real-Time Performance","Consumer Discretionary",0.0142
+"Rank A: Real-Time Performance","Utilities",0.0142
+"Rank A: Real-Time Performance","Communication Services",0.0142
+"Rank A: Real-Time Performance","Financials",0.0142
+"Rank A: Real-Time Performance","Energy",0.0142
+"Rank A: Real-Time Performance","Industrials",0.0142
+"Rank A: Real-Time Performance","Health Care",0.0142
+"Rank A: Real-Time Performance","Real Estate",0.0142
+"Rank A: Real-Time Performance","Consumer Staples",0.0142
+"Rank A: Real-Time Performance","Materials",0.0142
+"Rank B: 1 Day Performance","Consumer Staples",0.0101
+"Rank B: 1 Day Performance","Materials",0.0101
+"Rank B: 1 Day Performance","Utilities",0.0101
+"Rank B: 1 Day Performance","Communication Services",0.0101
+"Rank B: 1 Day Performance","Health Care",0.0101
+"Rank B: 1 Day Performance","Information Technology",0.0101
+"Rank B: 1 Day Performance","Real Estate",0.0101
+"Rank B: 1 Day Performance","Consumer Discretionary",0.0101
+"Rank B: 1 Day Performance","Industrials",0.0101
+"Rank B: 1 Day Performance","Financials",0.0101
+"Rank B: 1 Day Performance","Energy",0.0101
+"Rank C: 5 Day Performance","Consumer Discretionary",0.0541
+"Rank C: 5 Day Performance","Communication Services",0.0541
+"Rank C: 5 Day Performance","Materials",0.0541
+"Rank C: 5 Day Performance","Health Care",0.0541
+"Rank C: 5 Day Performance","Information Technology",0.0541
+"Rank C: 5 Day Performance","Consumer Staples",0.0541
+"Rank C: 5 Day Performance","Real Estate",0.0541
+"Rank C: 5 Day Performance","Utilities",0.0541
+"Rank C: 5 Day Performance","Industrials",0.0541
+"Rank C: 5 Day Performance","Financials",0.0541
+"Rank C: 5 Day Performance","Energy",0.0541
+"Rank D: 1 Month Performance","Information Technology",0.0469
+"Rank D: 1 Month Performance","Consumer Discretionary",0.0469
+"Rank D: 1 Month Performance","Communication Services",0.0469
+"Rank D: 1 Month Performance","Consumer Staples",0.0469
+"Rank D: 1 Month Performance","Health Care",0.0469
+"Rank D: 1 Month Performance","Materials",0.0469
+"Rank D: 1 Month Performance","Real Estate",0.0469
+"Rank D: 1 Month Performance","Utilities",0.0469
+"Rank D: 1 Month Performance","Industrials",0.0469
+"Rank D: 1 Month Performance","Financials",0.0469
+"Rank D: 1 Month Performance","Energy",0.0469
+"Rank E: 3 Month Performance","Consumer Discretionary",0.3429
+"Rank E: 3 Month Performance","Materials",0.3429
+"Rank E: 3 Month Performance","Information Technology",0.3429
+"Rank E: 3 Month Performance","Communication Services",0.3429
+"Rank E: 3 Month Performance","Energy",0.3429
+"Rank E: 3 Month Performance","Industrials",0.3429
+"Rank E: 3 Month Performance","Real Estate",0.3429
+"Rank E: 3 Month Performance","Health Care",0.3429
+"Rank E: 3 Month Performance","Financials",0.3429
+"Rank E: 3 Month Performance","Consumer Staples",0.3429
+"Rank E: 3 Month Performance","Utilities",0.3429
+"Rank F: Year-to-Date (YTD) Performance","Information Technology",0.1574
+"Rank F: Year-to-Date (YTD) Performance","Consumer Discretionary",0.1574
+"Rank F: Year-to-Date (YTD) Performance","Communication Services",0.1574
+"Rank F: Year-to-Date (YTD) Performance","Health Care",0.1574
+"Rank F: Year-to-Date (YTD) Performance","Materials",0.1574
+"Rank F: Year-to-Date (YTD) Performance","Consumer Staples",0.1574
+"Rank F: Year-to-Date (YTD) Performance","Real Estate",0.1574
+"Rank F: Year-to-Date (YTD) Performance","Utilities",0.1574
+"Rank F: Year-to-Date (YTD) Performance","Industrials",0.1574
+"Rank F: Year-to-Date (YTD) Performance","Financials",0.1574
+"Rank F: Year-to-Date (YTD) Performance","Energy",0.1574
+"Rank G: 1 Year Performance","Information Technology",0.329
+"Rank G: 1 Year Performance","Consumer Discretionary",0.329
+"Rank G: 1 Year Performance","Communication Services",0.329
+"Rank G: 1 Year Performance","Health Care",0.329
+"Rank G: 1 Year Performance","Consumer Staples",0.329
+"Rank G: 1 Year Performance","Materials",0.329
+"Rank G: 1 Year Performance","Utilities",0.329
+"Rank G: 1 Year Performance","Real Estate",0.329
+"Rank G: 1 Year Performance","Industrials",0.329
+"Rank G: 1 Year Performance","Financials",0.329
+"Rank G: 1 Year Performance","Energy",0.329
+"Rank H: 3 Year Performance","Information Technology",0.9968
+"Rank H: 3 Year Performance","Consumer Discretionary",0.9968
+"Rank H: 3 Year Performance","Health Care",0.9968
+"Rank H: 3 Year Performance","Communication Services",0.9968
+"Rank H: 3 Year Performance","Real Estate",0.9968
+"Rank H: 3 Year Performance","Utilities",0.9968
+"Rank H: 3 Year Performance","Consumer Staples",0.9968
+"Rank H: 3 Year Performance","Materials",0.9968
+"Rank H: 3 Year Performance","Industrials",0.9968
+"Rank H: 3 Year Performance","Financials",0.9968
+"Rank H: 3 Year Performance","Energy",0.9968
+"Rank I: 5 Year Performance","Information Technology",1.6864
+"Rank I: 5 Year Performance","Consumer Discretionary",1.6864
+"Rank I: 5 Year Performance","Health Care",1.6864
+"Rank I: 5 Year Performance","Utilities",1.6864
+"Rank I: 5 Year Performance","Industrials",1.6864
+"Rank I: 5 Year Performance","Consumer Staples",1.6864
+"Rank I: 5 Year Performance","Materials",1.6864
+"Rank I: 5 Year Performance","Communication Services",1.6864
+"Rank I: 5 Year Performance","Financials",1.6864
+"Rank I: 5 Year Performance","Energy",1.6864
+"Rank J: 10 Year Performance","Information Technology",4.6389
+"Rank J: 10 Year Performance","Consumer Discretionary",4.6389
+"Rank J: 10 Year Performance","Health Care",4.6389
+"Rank J: 10 Year Performance","Industrials",4.6389
+"Rank J: 10 Year Performance","Consumer Staples",4.6389
+"Rank J: 10 Year Performance","Materials",4.6389
+"Rank J: 10 Year Performance","Financials",4.6389
+"Rank J: 10 Year Performance","Utilities",4.6389
+"Rank J: 10 Year Performance","Communication Services",4.6389
+"Rank J: 10 Year Performance","Energy",4.6389

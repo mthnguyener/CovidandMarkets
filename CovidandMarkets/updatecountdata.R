@@ -147,7 +147,6 @@ df <- covidcounts %>%
   rename(c("timestamp"="Date", "country"="Country_Region", "total"="Daily_Total")) %>%
   select(case_type, timestamp, country, total, -Country_State, -Province_State, -Lat, -Long, -County, -Population, -Continent)
 
-
 df$country = replace(x = df$country, 
                              list =  !df$country %in% c('China', 'US', 'Italy'),
                              values =  'Others')
@@ -164,5 +163,14 @@ df <- df %>%
   summarize_all(sum)
 
 df <- df %>%
-  pivot_wider(names_from = c(type,country), values_from = total)
+  pivot_wider(names_from = c(type,country),  names_sep = ".", values_from = total)
 
+df <- df %>%
+  mutate(confirmed.total = sum(confirmed.China, confirmed.Italy, 
+                               confirmed.Others, confirmed.US),
+         deaths.total =  sum(deaths.China, deaths.Italy, 
+                             deaths.Others, deaths.US)) %>%
+  select(timestamp, confirmed.total, deaths.total)
+
+## export data 
+write.csv(df, "covidtotal.csv", row.names = FALSE)

@@ -1,0 +1,180 @@
+#MARCH PLOT
+
+if(input$negative == TRUE && input$fear == TRUE && input$anger == TRUE &&
+   input$sadness == TRUE && input$disgust == TRUE && input$positive == TRUE &&
+   input$joy == TRUE && input$anticipation == TRUE && input$surprise == TRUE && 
+   input$trust == TRUE){
+  pmarch + pnegative + pfear + panger + psadness + pdisgust + ppositive + 
+    pjoy + panticipation + psurprise + ptrust + pt
+} else if(input$negative == TRUE && input$fear == FALSE && 
+        input$anger == TRUE && input$sadness == TRUE && 
+        input$disgust == TRUE && input$positive == TRUE && 
+        input$joy == TRUE && input$anticipation == TRUE && 
+        input$surprise == TRUE && input$trust == TRUE) {
+  pmarch + pnegative + panger + psadness + pdisgust + ppositive + 
+    pjoy + panticipation + psurprise + ptrust + pt
+} else if(input$negative == TRUE && input$fear == TRUE && 
+        input$anger == FALSE && input$sadness == TRUE && 
+        input$disgust == TRUE && input$positive == TRUE && 
+        input$joy == TRUE && input$anticipation == TRUE && 
+        input$surprise == TRUE && input$trust == TRUE) {
+  pmarch + pnegative + psadness + pdisgust + ppositive + 
+    pjoy + panticipation + psurprise + ptrust + pt
+} else if(input$negative == TRUE && input$fear == TRUE && 
+        input$anger == TRUE && input$sadness == FALSE && 
+        input$disgust == TRUE && input$positive == TRUE && 
+        input$joy == TRUE && input$anticipation == TRUE && 
+        input$surprise == TRUE && input$trust == TRUE) {
+  pmarch + pnegative + pfear + panger + pdisgust + ppositive + 
+    pjoy + panticipation + psurprise + ptrust + pt
+} else if(input$negative == TRUE && input$fear == TRUE && 
+        input$anger == TRUE && input$sadness == TRUE && 
+        input$disgust == FALSE && input$positive == TRUE && 
+        input$joy == TRUE && input$anticipation == TRUE && 
+        input$surprise == TRUE && input$trust == TRUE) {
+  pmarch + pnegative + pfear + panger + psadness + ppositive + 
+    pjoy + panticipation + psurprise + ptrust + pt
+} else{
+  stop()
+  
+  
+}#ifelse
+
+
+#AFTER PLOT
+
+output$plot.after <- renderPlot({
+  ptitle <- str_c("Sentiments of Tweets as of Mar 31 - Now")
+  
+  panger <- geom_line(aes(y = anger), color = "orange")
+  panticipation <- geom_line(aes(y = anticipation), color = "blue")
+  pdisgust <- geom_line(aes(y = disgust), color = "green") 
+  pfear <- geom_line(aes(y = fear), color = "red")
+  pjoy <- geom_line(aes(y = joy), color = "grey")
+  pnegative <- geom_line(aes(y = negative), color = "orange")
+  ppositive <- geom_line(aes(y = positive), color = "blue")
+  psadness <- geom_line(aes(y = sadness), color = "red")
+  psurprise <- geom_line(aes(y = surprise), color = "red")
+  ptrust <- geom_line(aes(y = trust), color = "red")
+  
+  pt <- labs(title = ptitle, x = "Date", y = "")
+  
+  if(input$devices == "All"){
+    x <- march
+  } else if(input$devices == "Android") {
+    x <- march %>%
+      filter(sources == "Android")
+  } else if(input$devices == "iPad") {
+    x <- march %>%
+      filter(sources == "iPad")
+  } else if(input$devices == "iPhone") {
+    x <- march %>%
+      filter(sources == "iPhone")
+  } else if(input$devices == "others") {
+    x <- march %>%
+      filter(sources == "others")
+  } else{
+    x <- march %>%
+      filter(sources == "Web")
+  }
+  
+  pafter <- ggplot(data = x, aes(x = date))
+  
+  #"anger", "anticipation", "disgust", "fear", "joy", "negative", "positive", "sadness", "surprise", "trust"
+  
+  if(input$sentiment = "anger" && input$sentiment = "anticipation" && 
+     input$sentiment = "disgust" && input$sentiment = "fear" && 
+     input$sentiment = "joy" && input$sentiment = "negative" && 
+     input$sentiment = "positive" && input$sentiment = "sadness" && 
+     input$sentiment = "surprise" && input$sentiment = "trust") {
+    pmarch + panger + panticipation + pdisgust + pfear + pjoy + pnegative +
+      ppositive + psadness + psurprise + ptrust
+    
+  } else{
+    pmarch + panger
+  }#ifelse
+  
+})#plot.after
+
+
+
+#TWITTER PLOT
+
+df <- marvsafter
+
+if(d() == "All"){
+  df %>%
+    ggplot(aes(x = date, sentiment_count)) +
+    geom_line(aes(color = sentiments), size = 1.5) +
+    facet_wrap(~timeframe, scales = "free") +
+    theme(strip.text.x = element_text(size = 11, hjust = 0.5,
+                                      vjust =    0.5, face = 'bold'), 
+          axis.title.y = element_text(face="bold"), 
+          axis.title.x = element_text(face="bold"),
+          legend.position = "bottom") -> pl
+  pl
+  
+} else if(d()  == "Android") {
+  df %>%
+    filter(sources == "Android") %>%
+    ggplot(aes(x = date, sentiment_count)) +
+    geom_line(aes(color = sentiments), size = 1.5) +
+    facet_wrap(~timeframe, scales = "free") +
+    theme(strip.text.x = element_text(size = 11, hjust = 0.5,
+                                      vjust =    0.5, face = 'bold'), 
+          axis.title.y = element_text(face="bold"), 
+          axis.title.x = element_text(face="bold"),
+          legend.position = "bottom") -> pl
+  pl
+  
+} else if(d() == "iPad") {
+  df %>%
+    filter(sources == "iPad") %>%
+    ggplot(aes(x = date, sentiment_count)) +
+    geom_line(aes(color = sentiments), size = 1.5) +
+    facet_wrap(~timeframe, scales = "free") +
+    theme(strip.text.x = element_text(size = 11, hjust = 0.5,
+                                      vjust =    0.5, face = 'bold'), 
+          axis.title.y = element_text(face="bold"), 
+          axis.title.x = element_text(face="bold"),
+          legend.position = "bottom") -> pl
+  pl
+  
+} else if(d()  == "iPhone") {
+  df %>%
+    filter(sources == "iPhone") %>%
+    ggplot(aes(x = date, sentiment_count)) +
+    geom_line(aes(color = sentiments), size = 1.5) +
+    facet_wrap(~timeframe, scales = "free") +
+    theme(strip.text.x = element_text(size = 11, hjust = 0.5,
+                                      vjust =    0.5, face = 'bold'), 
+          axis.title.y = element_text(face="bold"), 
+          axis.title.x = element_text(face="bold"),
+          legend.position = "bottom") -> pl
+  pl
+} else if(d()  == "others") {
+  df %>%
+    filter(sources == "others") %>%
+    ggplot(aes(x = date, sentiment_count)) +
+    geom_line(aes(color = sentiments), size = 1.5) +
+    facet_wrap(~timeframe, scales = "free") +
+    theme(strip.text.x = element_text(size = 11, hjust = 0.5,
+                                      vjust =    0.5, face = 'bold'), 
+          axis.title.y = element_text(face="bold"), 
+          axis.title.x = element_text(face="bold"),
+          legend.position = "bottom") -> pl
+  pl
+  
+} else if(d() == "web") {
+  df %>%
+    filter(sources == "web") %>%
+    ggplot(aes(x = date, sentiment_count)) +
+    geom_line(aes(color = sentiments), size = 1.5) +
+    facet_wrap(~timeframe, scales = "free") +
+    theme(strip.text.x = element_text(size = 11, hjust = 0.5,
+                                      vjust =    0.5, face = 'bold'), 
+          axis.title.y = element_text(face="bold"), 
+          axis.title.x = element_text(face="bold"),
+          legend.position = "bottom") -> pl
+  pl
+}

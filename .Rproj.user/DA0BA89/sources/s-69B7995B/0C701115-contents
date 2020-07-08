@@ -1,0 +1,236 @@
+---
+title: "Stat 415/615 Regression: Lab 1. Simple Linear Regression"
+author: "Minh Nguyen"
+date: "July 2, 2020"
+output:
+  word_document:
+    toc: no
+    toc_depth: '1'
+  pdf_document:
+    toc: no
+    toc_depth: 1
+    number_sections: yes
+urlcolor: blue
+---
+
+<!-- 
+##############################################
+# Stat 415/615, Regression
+# R code for Lab 1 Simple Linear Regression
+# Last update: Summer 2020
+##############################################
+-->
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,
+                      fig.align  = "center",
+                      fig.height = 4, 
+                      fig.width  = 5)
+library(tidyverse)
+```
+
+\bigskip
+
+# Load data
+
+
+    ```{r}
+    pisa<-read.table("../../DataSets/Pisa.txt", header=T)
+    pisa
+    summary(pisa)
+    colnames(pisa)
+    dim(pisa)
+    ```
+
+- If there are missing values (denoted as "." in the original data file **pisa2.txt**), declare the notation for missing value.
+
+    ```{r}
+    pisa2<-read.table("../../DataSets/Pisa2.txt", header=T, na=".")
+    pisa2
+    summary(pisa2)
+    dim(pisa2)
+    ```
+
+\newpage
+
+# Histograms
+
+```{r}
+par(mfrow=c(1,2))
+hist(pisa$Year)
+hist(pisa$Lean)
+```
+
+- Findings:
+
+    - Variable `Year` is uniformly distributed from 74 to 87. There is no obvious outlier.
+    
+    - Variable `Lean` does NOT have a bell-shaped distribution. It is slightly skewed to the right. But given the small size, the shape of the distribution is difficult to summarize.There is no obvious outlier.
+
+\newpage
+
+# Scatter plot
+
+```{r}
+plot(Lean~Year, data=pisa)
+```
+
+\newpage
+
+Add a Loess line to illustrate the pattern
+
+```{r}
+pisa.lo<-loess(Lean ~ Year, data=pisa)
+newx<-seq(75, 87, by=0.25)
+plot(Lean~Year, data=pisa)
+lines(newx,	predict(pisa.lo, data.frame(Year=newx)))
+```
+
+- Findings:
+
+    The variables `Lean` and `Year` appear to be linear correlated with a positive trend. I.e., as `Year` increases, `Lean` tend to increase as well. 
+
+\newpage
+
+# Simple linear regression (OLS) with `lm()`
+```{r}
+pisa.SLR<-lm(Lean~Year, data=pisa)
+pisa.SLR
+```
+
+- The estimated linear regression line (OLS) is: $\widehat{Lean} = -61.12 + 9.32(Year)$. For every additional year, the lean is expected to increase 9.32cm.
+
+# More about the output
+
+```{r}
+summary(pisa.SLR)
+```
+
+a. The regression line is $\hat{Lean} = -61.12 + 9.32(Year)$.
+
+b. From the output above, the std.err. for $\hat{\beta_1}$ is 0.31. The 95% CI for $\beta_1$ is: $\hat{\beta_1} \pm t_{(df=n-2, 1-\alpha/2)}\times se(\hat{\beta_1})$. Plugging the values to the formula, the 95% CI is:
+
+    ```{r}
+tcrit <- qt(0.975, df=11)
+tcrit
+c(9.32 - tcrit*0.31, 9.32 + tcrit*0.31) # 95% CI for \beta_1.
+```
+
+c. The t-test statistic is $t_{obs} = (\hat{\beta_1}-8)/se(\hat{\beta_1})$. Since the alternative hypothesis is $H_A: \beta_1 > 8$, the p-value is calculated by $P(t_{df=n-1} > t_{obs})$.
+
+    ```{r}
+tobs <- (9.32-8)/0.31
+data.frame("t_statistic" = tobs, "p_value"= 1-pt(tobs, df=11))
+    ```
+    Though the significance level ($\alpha$) is not stated here, the resulting p-value (0.00067) is less than any commonly used $\alpha$ value. Hence we reject the null hypothesis. The data provide significance evidence that the slope is greater than 8.
+
+d. To test $H_0: \beta_1 = 0$ vs $H_A: \beta_1 \neq 0$, we can take a similar calculation as in c. However, the easiest way is to use the `lm()` output. We can see that the t-statistic value for the test is 30.069, and the p-value is $6.5 \times 10^{-12}$. We reject $H_0$. There is significant evidence to believe the lean changed every year.
+
+e. Use the ANOVA table.
+    ```{r}
+    anova(pisa.SLR)
+    ```
+    - The estimate of the variance of the error is $MSE = 17.5$.
+    - The estimated standard error of the model is $\sqrt{MSE} = \sqrt{17.5} =  4.181$.
+    - The "estimated standard error of the model" is also referred to as the "Residual standard error", which can be found in the output from `summary(pisa.SLR)` earlier.
+  
+f. Note that R doesn't show $SS_{Total}$. But the values are easy to verify.
+
+g. From the ANOVA table, $R^2 = SS_{Regression}/SS_{Total} = 15804.5/(15804.5+192.3) = 0.988 = 98.8\%$. $R^2$ is also presented in the output from `summary(pisa.SLR)` earlier. About 98.8% of the *total variation* in `Lean` can be determined (or explained, or reduced) by the simple linear regression using `Year` as the predictor.
+
+# Use R functions `confint()`, `predict()` to save CI, residuals, fitted values, etc.
+
+- `lm()` has saved some additional results
+
+    ```{r}
+    ls(pisa.SLR)
+    ```
+    
+- Estimated regression parameters
+    ```{r}
+    pisa.SLR$coefficients
+    ```
+    
+- Residuals.
+    ```{r}
+    pisa.SLR$residuals      
+    ```
+
+- Confidence intervals for the regression parameters
+
+    ```{r}
+    confint(pisa.SLR, level=0.95)
+    ```
+    
+- Predicted (fitted) values for existing x-values
+
+    ```{r}
+    predict(pisa.SLR, se.fit = T, interval = "confidence")
+    predict(pisa.SLR, se.fit = T, interval = "prediction")
+    ```
+
+    **Caution:** Though we can select "confidence interval" or "prediction interval", the argument `se.fit=T` always saves the standard error of the mean of Y (i.e., $\widehat{E(Y)}$).
+    
+# Predicting new Y: CI and PI
+```{r}
+predict(pisa.SLR, newdata=data.frame(Year=112), se.fit = T,
+        interval = "confidence", leve=0.95)
+predict(pisa.SLR, newdata=data.frame(Year=112), se.fit = F,
+        interval = "prediction", leve=0.95)
+```
+
+# Plotting regression line with data
+```{r}
+plot(Lean~Year, data=pisa)
+abline(pisa.SLR$coef)
+newx<-seq(75, 87, by=0.25)
+pisa.CI<-predict(pisa.SLR, newdata=data.frame(Year=newx), interval="confidence", leve=0.95)
+pisa.PI<-predict(pisa.SLR, newdata=data.frame(Year=newx), interval="prediction", leve=0.95)
+lines(newx, pisa.CI[,2], lty=2, col=2)
+lines(newx, pisa.CI[,3], lty=2, col=2)
+lines(newx, pisa.PI[,2], lty=3, col=3, lwd=3)
+lines(newx, pisa.PI[,3], lty=3, col=3, lwd=3)
+```
+You can also add the Loess line if you like (see section 3).
+
+# Residuals 
+```{r}
+pisa.SLR$resi
+```
+
+# Residual plot
+```{r}
+plot(pisa$Year, pisa.SLR$resi)
+abline(0, 0, lty=2)
+```
+
+- Finding:
+    The residuals are scattered around 0. There is no clear sign of non-constant variance of the residuals. There is no clear sign of outliers in the residuals. (More in regression diagnostics.)
+
+# Histogram of the residuals
+```{r}
+hist(pisa.SLR$resi)
+```
+- Finding:
+    The residuals do not appear to be Normally distributed. The histogram is bi-modal and skewed to the right. There is no obvious outliers. Since this is a really small data set, the shape of the histogram may not be conclusive.
+
+
+# QQ plot and Normality test for the residuals
+```{r}
+qqnorm(pisa.SLR$resi)
+qqline(pisa.SLR$resi)
+shapiro.test(pisa.SLR$resi)
+```
+- Finding:
+    The Q-Q plot shows the data (dot) are scatter around the reference line but with a "S"-shaped patter. However, the Normality test suggest the Normality assumption on the **residuals** (caution: do not say "the response variable") won't be rejected. Such different conclusion is due to the small sample size in this study.
+
+\bigskip
+
+\begin{center}
+
+\textbf{This is the end of Lab 1.}
+
+\end{center}
+
+
+

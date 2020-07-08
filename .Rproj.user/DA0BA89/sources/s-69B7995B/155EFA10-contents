@@ -1,0 +1,15 @@
+covidtotal <- read.csv("C:/Users/mthng/OneDrive/Documents/Personal/School/4 Summer 2020/Regression (STAT 615-001)/Project/CovidandMarkets/CovidandMarkets/data/covidtotal.csv") %>%
+  select(-X)
+
+tech <- read.csv("C:/Users/mthng/OneDrive/Documents/Personal/School/4 Summer 2020/Regression (STAT 615-001)/Project/CovidandMarkets/CovidandMarkets/data/tech.csv")
+
+hosp <- read.csv("C:/Users/mthng/OneDrive/Documents/Personal/School/4 Summer 2020/Regression (STAT 615-001)/Project/CovidandMarkets/CovidandMarkets/data/hosp.csv")
+
+full.data <- rbind(tech, hosp) %>%
+  filter(timestamp > as.Date("2020-01-21")) %>% 
+  select(-X)
+
+full.data <- left_join(full.data, covidtotal, by = "timestamp")
+
+## export data 
+write.csv(full.data, "covidandmarkets.csv")

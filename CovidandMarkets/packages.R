@@ -22,6 +22,7 @@ library(broom)
 library(reshape)
 library(leaflet)
 library(plotly)
+library(lmtest)
 
 library(devtools)
 library(usethis)

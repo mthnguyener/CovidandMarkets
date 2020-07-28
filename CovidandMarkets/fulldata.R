@@ -10,24 +10,29 @@ full.data <- rbind(tech, hosp) %>%
 full.data <- left_join(full.data, covidtotal, by = "timestamp")
 
 full.data <- full.data %>%
-  mutate(previous.confirmed = lag(confirmed.total),
-         previous.deaths = lag(deaths.total),
-         previous.confirmed.rate = lag(confirmed.total/previous.confirmed),
-         previous.deaths.rate = lag(deaths.total/previous.deaths))
+  rename(c("vix.change.percent"="vix.previous.rate", 
+           "change.percent"="previous.rate")) %>%
+  mutate(change.percent = lag((close-previous)/previous),
+         vix.change.precent = lag((vix.close-vix.previous)/vix.previous),
+         confirmed.previous = lag(confirmed.total),
+         deaths.previous = lag(deaths.total),
+         confirmed.change.percent = lag((confirmed.total - confirmed.previous)/
+                                          confirmed.previous),
+         deaths.change.percent = lag((deaths.total - deaths.previous)/deaths.previous))
+  
 
 full.data <- full.data %>%
-  na.omit() %>% 
   mutate(result = ifelse(close > previous, "up", "down"),
          vix.result = ifelse(vix.close > vix.previous, "up",
                              ifelse(vix.close < vix.previous, "down",
-                                    "neautral")),
-         confirmed.result = ifelse(confirmed.total > previous.confirmed, "up",
-                                   ifelse(confirmed.total < previous.confirmed, "down",
+                                    "neutral")),
+         confirmed.result = ifelse(confirmed.total > confirmed.previous, "up",
+                                   ifelse(confirmed.total < confirmed.previous, "down",
                                           "neutral")),
-         deaths.result = ifelse(deaths.total > previous.deaths, "up",
-                                ifelse(deaths.total < previous.deaths, "down",
+         deaths.result = ifelse(deaths.total > deaths.previous, "up",
+                                ifelse(deaths.total < deaths.previous, "down",
                                        "neutral"))) %>%
-  select(timestamp:close, previous, previous.rate, result, vix.open:vix.previous.rate, vix.result, confirmed.total, previous.confirmed, previous.confirmed.rate, confirmed.result, deaths.total, previous.deaths, previous.deaths.rate, deaths.result)
+  select(timestamp:close, volume, previous, change.percent, result, vix.open:vix.change.percent, vix.result, confirmed.total, confirmed.previous, confirmed.change.percent, confirmed.result, deaths.total, deaths.previous, deaths.change.percent, deaths.result)
 
 full.data <- full.data %>%
   mutate(timestamp = as.Date(timestamp),

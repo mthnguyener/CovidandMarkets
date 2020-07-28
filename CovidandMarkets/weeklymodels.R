@@ -1,4 +1,4 @@
-df <- read.csv("covidandmarkets.csv") %>%
+dfweekly <- read.csv("weeklycovidandmarkets.csv") %>%
   mutate(result = as.factor(result),
          vix.result = as.factor(vix.result),
          company = as.factor(company),
@@ -6,41 +6,32 @@ df <- read.csv("covidandmarkets.csv") %>%
          confirmed.result = as.factor(confirmed.result),
          deaths.result = as.factor(deaths.result))
 
-str(df)
+str(dfweekly)
 
 #previous.rate = open/previous,
 #vix.previous.rate = vix.open/vix.previous
 #previous.confirmed.rate = confirmed.total/previous.confirmed
 #previous.deaths.rate = deaths.total/previous.deaths
-model.data <- df %>%
-  mutate(vix.change = vix.close - vix.previous,
-         vix.change.percent = lag((vix.close-vix.previous)/vix.previous)) %>%
-  select(timestamp:close, previous, change.percent, volume, result:deaths.result, vix.change)
+weekly.model <- dfweekly %>%
+  mutate(vix.change = vix.previous - vix.close)
 
-str(model.data)
+str(weekly.model)
 
-selcri<-function(lmout)
-{
-  n <- length(lmout$fit)
-  rsq <- summary(lmout)$r.sq
-  adj.rsq <- summary(lmout)$adj.r.sq
-  aic <- extractAIC(lmout)[2]
-  bic <- extractAIC(lmout, k = log(n))[2]
-  press <- sum((lmout$residuals/(1 - hatvalues(lmout)))^2)
-  cbind(rsq, adj.rsq, aic, bic, press)
-}
+#VIX OPEN (FULL - unreliable)
+weekly.lm <- lm(vix.open ~ . - week - company, data = weekly.model)
+summary(weekly.lm)
 
 #VIX OPEN (Model 1 - assumption)
-model1.lm <- lm(vix.open ~ category + open + previous + vix.previous +
+weekly1.lm <- lm(vix.open ~ category + open + previous + vix.previous +
                    confirmed.previous + deaths.previous, 
-                 data = model.data)
-summary(model1.lm)
+                data = weekly.model)
+summary(weekly1.lm)
 
 #VIX CLOSE (Model 2 - assumption)
 weekly2.lm <- lm(vix.close ~ category + open + high + low + close + previous + 
                    vix.previous + confirmed.total + confirmed.change.percent + 
                    deaths.total + deaths.change.percent, 
-                 data = model.data)
+                 data = weekly.model)
 summary(weekly2.lm)
 
 #VIX CHANGE (Model 3 - assumption)
@@ -48,17 +39,16 @@ weekly3.lm <- lm(vix.change ~ category + open + high + low + close + previous +
                    change.percent + vix.change.percent + confirmed.total + 
                    confirmed.previous + confirmed.change.percent + 
                    deaths.total + deaths.previous + deaths.change.percent,
-                 data = model.data)
+                data = weekly.model)
 summary(weekly3.lm)
 
-#BY CATEGORY
-techstocks <- model.data %>%
+techstocks <- weekly.model %>%
   filter(category == "technology") %>%
   select(-category)
 
 str(techstocks)
 
-hospstocks <- model.data %>%
+hospstocks <- weekly.model %>%
   filter(category == "hospitality") %>%
   select(-category)
 

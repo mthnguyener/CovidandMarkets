@@ -1,0 +1,18 @@
+,Ridge,LASSO
+(Intercept),3.15E+00,-1.22E+00
+day,4.00E-03,6.03E-02
+open,-2.06E-02,-3.17E-01
+high,9.01E-05,1.22E-01
+low,5.11E-03,3.31E-01
+close,-7.07E-04,.
+previous,6.98E-03,-1.33E-01
+change.percent,-3.82E+01,-6.95E+01
+volume,1.05E-08,2.63E-08
+vix.previous,-3.55E-02,-4.09E-02
+vix.change.percent,2.55E+01,2.92E+01
+confirmed.total,2.35E-08,4.13E-08
+confirmed.previous,1.47E-08,.
+confirmed.change.percent           ,6.61E-01,7.41E+00
+deaths.total,1.91E-07,.
+deaths.previous,5.86E-08,-1.15E-05
+deaths.change.percent,-1.88E+00,-8.25E+00

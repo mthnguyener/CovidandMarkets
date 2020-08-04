@@ -1,0 +1,77 @@
+---
+title: "Statnew"
+author: "NatashaKarwal"
+date: "8/1/2020"
+output: word_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+library(readr)
+library(ggplot2)
+library(dplyr)
+library(reshape2)
+library(leaps)
+library(lmtest)
+library(car)
+```
+
+```{r}
+nb12<- read.csv("/Users/nk106/OneDrive/Documents/apple.csv", header=TRUE)
+nb12
+summary(nb12)
+```
+
+#Full Model
+#Even though R^2 and adjusted R^2 are high, this may not necessarily confirm
+#the model being a favourable one. Also, R^2 and adjusted R^2 are good 
+#comparisons for models with same number of parameters. 
+```{r}
+Fullmodelp<- lm(vixchange ~.-day, data=nb12)
+summary(Fullmodelp)
+```
+#Main focus is to predict vixchange based on covid indicators but the subset
+#choice below of variables differs from our main focus since it has chosen
+#stock related variables. 
+```{r}
+testsub<-regsubsets(vixchange ~.-day, data=nb12)
+bestsubt<-summary(testsub)
+bestsubt
+```
+
+```{r}
+newfull<- nb12%>%
+  select(vixchange,vixprevious,vixchangepercent,confirmedtotal,confirmedprevious,confirmedchangepercent,deathstotal,deathsprevious,deathschangepercent)
+newfull
+```
+#Partial Regression Plots without stock related variable 
+```{r}
+regplot<-lm(vixchange ~., data=newfull)
+summary(regplot)
+```
+
+#Added-variable plot (partial regression plot)
+#Reference line appears almost flat for most 
+#does not seem to be highly correlated with the response variable
+```{r}
+avPlots(regplot)
+```
+
+#DW=2.254 seems favourable
+```{r}
+dwtest(regplot)
+```
+#Variance Inflation Factor (VIF)
+#There seems moderate correlation between predictors for vix and volume. 
+#Others are highly correlated 
+```{r}
+vif(Fullmodelp)
+```
+
+
+
+

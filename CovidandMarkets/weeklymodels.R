@@ -1,3 +1,6 @@
+library(tidyverse)
+library(dplyr)
+
 dfweekly <- read.csv("weeklycovidandmarkets.csv") %>%
   mutate(result = as.factor(result),
          vix.result = as.factor(vix.result),
@@ -10,7 +13,10 @@ str(dfweekly)
 
 weekly.model <- dfweekly %>%
   mutate(vix.change = vix.previous - vix.close) %>%
-  na.omit()
+  na.omit() %>%
+  select(vix.change, week, open, high, low, close, previous, change.percent, 
+         volume, vix.previous, vix.change.percent, confirmed.total, confirmed.previous, 
+         confirmed.change.percent, deaths.total, deaths.previous, deaths.change.percent)
 
 str(weekly.model)
 
@@ -38,13 +44,32 @@ summary(weekly2.lm)
 
 #------------
 #VIX CHANGE (Model 3 - assumption)
-weekly3.lm <- lm(vix.change ~ week + category + open + high + low + close + 
+weekly3.lm <- lm(vix.change ~ week + open + high + low + close + 
                    previous + change.percent + volume + vix.previous + 
+                   vix.change.percent + 
                    confirmed.total + confirmed.previous + 
                    confirmed.change.percent + deaths.total + deaths.previous + 
                    deaths.change.percent,
                  data = weekly.model)
 summary(weekly3.lm)
+
+# Testing for Heteroskedasticity
+library(MASS) # Contains the “Boston" housing data set
+library(lmtest) # Contains bptest( ) and more
+lm.ols <- weekly3.lm # Fit the model using all predictors for medv
+bptest(lm.ols, data=weekly.model) # Breusch-Pagan test - Small p-value = Heteroskedastic
+plot(lm.ols, which=1) # First plot() renders the residual plot
+
+# Correcting Heteroskedastic - Fitting WLS
+lm.ols <- weekly3.lm # Fit OLS regression
+lm.abs.res <- lm( abs(residuals(lm.ols)) ~ fitted(lm.ols) ) # Regress absolute value of OLS residuals on fitted values 
+wts <- 1/fitted(lm.abs.res)^2 # Weight vector, inverse of predicted absolute value of residuals, squared
+lm.wls <- lm(vix.change ~ .,data=weekly.model, weights=wts)
+summary(lm.wls) # More stable model (i.e., lower variance) than OLS, the coefficients are similar.
+
+lm.wls # Fit the model using all predictors for medv
+bptest(lm.wls, data=weekly.model) # Breusch-Pagan test - Small p-value = Heteroskedastic
+plot(lm.wls, which=1)
 
 # Serial Correlation Visual Inspection
 plot(weekly.model$week, weekly3.lm$residuals) # Plot residuals against ordered time T
